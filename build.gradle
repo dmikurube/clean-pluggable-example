@@ -1,0 +1,9 @@
+allprojects {
+    group = 'com.github.dmikurube.clean-pluggable-example'
+    version = '0.0.1'
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+}

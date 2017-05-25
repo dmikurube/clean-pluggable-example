@@ -1,6 +1,6 @@
 public class TimestampImpl implements Timestamp {
     @Override
-    public int getDifferenceInSeconds(Timestamp other) {
+    public long getEpoch() {
         throw new UnsupportedOperationException("Not implemented.");
     }
 }

@@ -1,3 +1,3 @@
 public interface Timestamp {
-    int getDifferenceInSeconds(Timestamp other);
+    long getEpoch();
 }

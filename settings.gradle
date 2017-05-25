@@ -1,0 +1,5 @@
+rootProject.name = 'clean-pluggable-example'
+
+include 'core-iface'
+include 'core-impl'
+// include 'plugin'

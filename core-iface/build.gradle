@@ -1,0 +1,3 @@
+dependencies {
+    // DO NOT DEPEND ON EXTERNAL LIBRARIES!
+}
