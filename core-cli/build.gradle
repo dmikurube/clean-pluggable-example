@@ -1,17 +1,36 @@
 buildscript {
     repositories { jcenter() }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
     }
+}
+
+configurations {
+    embedJar
 }
 
 apply plugin: 'com.github.johnrengelman.shadow'
 
 dependencies {
     compile project(':core-iface')
+    embedJar project(':core-impl')
 }
 
-shadowJar {
+task copyLibraryJars(type: Copy, dependsOn: processResources) {
+    from configurations.embedJar
+    into "$buildDir/resources/main/jars"
+    exclude { details -> details.file.name.startsWith('core-iface') }
+
+    // "*.jar" resources in the shadowed JAR are unfortunately unzipped by the Gradle Shadow plugin
+    // @see https://github.com/johnrengelman/shadow/issues/111
+    rename { String fileName -> fileName.replace('.jar', '.jar.embed') }
+}
+
+classes {
+    dependsOn copyLibraryJars
+}
+
+jar {
     manifest {
         attributes 'Implementation-Title': project.name,
                    'Implementation-Version': project.version,
@@ -21,12 +40,3 @@ shadowJar {
                    'Main-Class': 'Main'
     }
 }
-
-/*
-task classpath(type: Copy, dependsOn: ['jar']) {
-    File dest = file("${rootProject.projectDir}/classpath")
-    doFirst { dest.deleteDir() }
-    from configurations.runtime + files("${project.libsDir}/${project.name}-${project.version}.jar")
-    into dest
-}
-*/
