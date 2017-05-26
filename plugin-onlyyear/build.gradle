@@ -1,0 +1,20 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.0'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+dependencies {
+    // DO NOT DEPEND ON core-impl!
+    compile project(':core-iface')
+    compile 'joda-time:joda-time:2.9.9'  // Example: different version from core-impl.
+}
+
+shadowJar {
+    dependencies {
+        exclude(project(':core-iface'))
+    }
+}
