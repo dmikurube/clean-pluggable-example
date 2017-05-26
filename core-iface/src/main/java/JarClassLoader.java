@@ -16,14 +16,14 @@ import java.util.jar.JarFile;
 
 public class JarClassLoader extends URLClassLoader {
     public JarClassLoader(URL[] urls, ClassLoader parent) {
-        super(urls, parent);
+        super(new URL[0], parent);
         try {
             ProtectionDomain protectionDomain = getClass().getProtectionDomain();
             CodeSource codeSource = protectionDomain.getCodeSource();
             URL rootJarUrl = codeSource.getLocation();
             String rootJarName = rootJarUrl.getFile();
             if (isJar(rootJarName)) {
-                addJarResource(new File(rootJarUrl.getPath()));
+                addJarResource(new File(rootJarUrl.getPath()), true);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -86,15 +86,17 @@ public class JarClassLoader extends URLClassLoader {
         }
     }
 
-    private void addJarResource(File file) throws IOException {
+    private void addJarResource(File file, boolean root) throws IOException {
         JarFile jarFile = new JarFile(file);
-        System.out.println(file.toURL().toString());
-        addURL(file.toURL());
+        if (!root) {
+            System.out.println(file.toURL().toString());
+            addURL(file.toURL());
+        }
         Enumeration<JarEntry> jarEntries = jarFile.entries();
         while (jarEntries.hasMoreElements()) {
             JarEntry jarEntry = jarEntries.nextElement();
             if (!jarEntry.isDirectory() && isJar(jarEntry.getName())) {
-                addJarResource(jarEntryAsFile(jarFile, jarEntry));
+                addJarResource(jarEntryAsFile(jarFile, jarEntry), false);
             }
         }
     }

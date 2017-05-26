@@ -58,5 +58,7 @@ public class Main {
             ex.printStackTrace();
             return;
         }
+
+        System.out.println(timestamp.getEpoch());
     }
 }
