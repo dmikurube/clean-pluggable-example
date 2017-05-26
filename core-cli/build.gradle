@@ -1,0 +1,32 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+dependencies {
+    compile project(':core-iface')
+}
+
+shadowJar {
+    manifest {
+        attributes 'Implementation-Title': project.name,
+                   'Implementation-Version': project.version,
+                   'Implementation-Vendor-Id': project.group,
+                   'Specification-Title': project.name,
+                   'Specification-Version': project.version,
+                   'Main-Class': 'Main'
+    }
+}
+
+/*
+task classpath(type: Copy, dependsOn: ['jar']) {
+    File dest = file("${rootProject.projectDir}/classpath")
+    doFirst { dest.deleteDir() }
+    from configurations.runtime + files("${project.libsDir}/${project.name}-${project.version}.jar")
+    into dest
+}
+*/
