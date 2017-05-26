@@ -27,7 +27,7 @@ public class Main {
 
     private static PluginSpi loadPlugin(final URL pluginUrl) {
         URL[] pluginUrls = { pluginUrl };
-        PluginClassLoader loader = new PluginClassLoader(pluginUrls, Thread.currentThread().getContextClassLoader());
+        URLClassLoader loader = new URLClassLoader(pluginUrls, Thread.currentThread().getContextClassLoader());
         final Class<?> pluginClass;
         try {
             pluginClass = loader.loadClass("Plugin");
